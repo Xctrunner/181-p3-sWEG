@@ -1,0 +1,94 @@
+\documentclass[11pt]{article}
+
+\usepackage{common}
+\title{Practical 3: Music Recommendation}
+\author{Ethan Alley, Grigory Khimulya, Walter Martin \\ 
+alley@college, khimulya@college, wmartin@college }
+\begin{document}
+
+
+\maketitle{}
+
+
+\section{Technical Approach}
+
+We tried several approaches.
+\begin{itemize}
+	\item One-hot encoding everything, user, artist, and demographics, and running a NN regression on that
+	\item Clustering users based on how many plays they had given each artist
+	\item Clustering artists based on the demographics of their listeners
+	\item Clustering users based on how many plays that had given each artist cluster (which implicitly includes demographic information)
+	\item Combinations of different types of averages (non parametric)
+	\item Running a NN regression on the one-hot encoding of this user cluster, the artist cluster, and user demographic information for each training example
+\end{itemize}
+
+\noindent The first attempt at one-hot encoding was done with the out-of-the-box sklearn MLPRegressor. 
+
+The first attempt at user clustering was done with a similar strategy to the artist clustering described immediately below. Ultimately, the $\sim200000$ users being clustered using $2000$ dimensional vectors was not computation feasible.
+
+Artist clustering was done with Walter's $k$-means implementation from the previous theory pset. To start, a size $2000 \times n$ matrix was initialized, where $n$ is the size of the one-hot encoding of the demographics (age was limited to be in $[0, 119]$, which required some scrubbing ahead of time). For each element in the training data, the concatenated result of all of the one-hot vectors for that user was added to the row of the matrix corresponding to that artist. At the end, each row was divided by the total number of times that artist appeared in the training data (which emphasizes which demographics like the artist, not how popular the artist is). $k$-means with $k = 50$ was run to produce centroids which could then be used to assign examples to a cluster.
+
+The second attempt at user clustering was done the same way as above. A size $\sim 200000 \times 50$ matrix was initialized. For each training example, the artist cluster was identified, and the number of plays added to the element of the matrix corresponding to the appropriate user and artist cluster. Here, $k$ was chosen to be $200$. 
+
+Averages and combinations involved getting averages and medians globally as well as for individual artists and users. Various linear combinations of these values were tested with a held-out validation set.
+
+The second attempt at neural network regression was done much the same way as the first, with sklearn's MLPRegressor, but instead of gigantic one-hot encodings for users and artists, the new feature vector was composed of $200 + 50 + n$ elements, where $n$ is once again the size of the one-hot encoding of the gender, age, and nation demographics. 
+
+
+\section{Results}
+This section should report on the following questions: 
+
+\begin{itemize}
+\item Did you create and submit a set of
+  predictions? 
+  
+
+\item  Did your methods give reasonable performance?  
+\end{itemize}
+
+\noindent You must have \textit{at least one plot or table}
+that details the performances of different methods tried. 
+Credit will be given for quantitatively reporting (with clearly
+labeled and captioned figures and/or tables) on the performance of the
+methods you tried compared to your baselines.
+
+
+
+\begin{table}
+\centering
+\begin{tabular}{llr}
+ \toprule
+ Model &  & Acc. \\
+ \midrule
+ \textsc{Baseline 1} & & 0.45\\
+ \textsc{Baseline 2} & & 2.59 \\
+ \textsc{Model 1} & & 10.59  \\
+ \textsc{Model 2} & &13.42 \\
+ \textsc{Model 3} & & 7.49\\
+ \bottomrule
+\end{tabular}
+\caption{\label{tab:results} Result tables can compactly illustrate absolute performance, but a plot may be more effective at illustrating a trend.}
+\end{table}
+
+
+
+
+\section{Discussion} 
+
+
+End your report by discussing the thought process behind your
+analysis. This section does not need to be as technical as the others 
+but should summarize why you took the approach that your did. Credit will be given for:
+
+  \begin{itemize}
+  \item Explaining the your reasoning for why you seqentially chose to
+    try the approaches you did (i.e. what was it about your initial
+    approach that made you try the next change?).  
+  \item Explaining the results.  Did the adaptations you tried improve
+    the results?  Why or why not?  Did you do additional tests to
+    determine if your reasoning was correct?  
+  \end{itemize}
+ 
+
+\end{document}
+

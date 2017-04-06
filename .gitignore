@@ -3,3 +3,6 @@
 *.idea*
 *.py
 *.npy
+cluster_fast.ipynb
+!practical_3.tex
+practical_3.*
