@@ -73,6 +73,11 @@ We submitted predictions. The first two were simple submissions with linear comb
 
 \section{Discussion} 
 
+\begin{itemize}
+	\item We first attempted the large feature vector implementation because in theory, all the information available to us would be encoded that way, and we wanted to see if it was possible to do a simple regression. Because it wasn't, we started looking at clustering.
+	\item Our first thought was that the largest factor in the aggressively sized feature vector was the one-hot encoding of the users, it being over $200000$ elements long. As such, we decided that crunching the user features down with clustering would be the most effective way to make running a neural net feasible. This may have been true, but at least using Walter's $k$-means implementation from last pset (he forgot that sklearn has a $k$-means package), this was also taking far too long.
+	\item As a result, we decided to make the problem even smaller. Our reasoning was that if we could cluster the $2000$ artists down to $50$, we would stand a better chance clustering users with scaled-down feature vectors. This was effective. Which the handmade $k$-means may not have been fast, it got the job done, providing a reasonable spread across $50$ centroids.
+\end{itemize}
 
 End your report by discussing the thought process behind your
 analysis. This section does not need to be as technical as the others 
