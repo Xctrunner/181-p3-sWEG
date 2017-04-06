@@ -32,45 +32,43 @@ The second attempt at user clustering was done the same way as above. A size $\s
 
 Averages and combinations involved getting averages and medians globally as well as for individual artists and users. Various linear combinations of these values were tested with a held-out validation set.
 
-The second attempt at neural network regression was done much the same way as the first, with sklearn's MLPRegressor, but instead of gigantic one-hot encodings for users and artists, the new feature vector was composed of $200 + 50 + n$ elements, where $n$ is once again the size of the one-hot encoding of the gender, age, and nation demographics. 
+The second attempt at neural network regression was done much the same way as the first, with sklearn's MLPRegressor, but instead of gigantic one-hot encodings for users and artists, the new feature vector was composed of $200 + 50 + n$ elements, where $n$ is once again the size of the one-hot encoding of the gender, age, and nation demographics. This regression was done on about a quarter of the data.
 
 
 \section{Results}
-This section should report on the following questions: 
 
+We submitted predictions. The first two were simple submissions with linear combinations of means and medians - these were not better than the user median baseline. The third was a dud. It was meant to be the result of the dual-clustered NN, but due to a bug in the construction of the submission CSV, the values inside were garbage. \\
+
+\noindent Results for each method attempted: 
 \begin{itemize}
-\item Did you create and submit a set of
-  predictions? 
-  
+	\item Our first attempt at regression was terminated early - we have no results.
+	\item The original user clustering was also terminated early.
+	\item Without context, this means very little, but the result of the objective function on artist clustering using the $\ell_2$ norm was $244.46$, where there were $2000$ artists and the values of each element of their features were between $0$ and $1$.
+	\item The result of the objective function on user clustering was not recorded.
+	\item Combinations of averages:
+	\begin{table}[h]
+		\centering
+		\begin{tabular}{llr}
+			\toprule
+			Model &  & Error \\
+			\midrule
+			Global Median & & 312462 \\
+			Artist Median & & 307826 \\
+			Global Median + 120 & & 295602 \\
+			Artist Mean & & 291215\\
+			User Median & & 175461  \\
+			User Mean & &168582 \\
+			.5 * UMean + .5 * UMed & & 165047 \\
+			.7 * UMean + .3 * UMed & & 164788 \\
+			.6 * UMean + .4 * UMed & & 164639 \\
+			.6 * UMean + .4 * UMed + 20 & & 163995 \\
+			\bottomrule
+		\end{tabular}
+		\caption{\label{tab:results} MSE for each model.}
+	\end{table}
 
-\item  Did your methods give reasonable performance?  
+	\item Using the same error metric as the table above, the quarter-data dual-cluster NN regression produced an error of $144942$, better than anything else we'd seen.
 \end{itemize}
-
-\noindent You must have \textit{at least one plot or table}
-that details the performances of different methods tried. 
-Credit will be given for quantitatively reporting (with clearly
-labeled and captioned figures and/or tables) on the performance of the
-methods you tried compared to your baselines.
-
-
-
-\begin{table}
-\centering
-\begin{tabular}{llr}
- \toprule
- Model &  & Acc. \\
- \midrule
- \textsc{Baseline 1} & & 0.45\\
- \textsc{Baseline 2} & & 2.59 \\
- \textsc{Model 1} & & 10.59  \\
- \textsc{Model 2} & &13.42 \\
- \textsc{Model 3} & & 7.49\\
- \bottomrule
-\end{tabular}
-\caption{\label{tab:results} Result tables can compactly illustrate absolute performance, but a plot may be more effective at illustrating a trend.}
-\end{table}
-
-
 
 
 \section{Discussion} 
