@@ -67,7 +67,7 @@ We submitted predictions. The first two were simple submissions with linear comb
 		\caption{\label{tab:results} MSE for each model.}
 	\end{table}
 
-	\item Using the same error metric as the table above, the quarter-data dual-cluster NN regression produced an error of $144942$, better than anything else we'd seen.
+	\item Using the same error metric as the table above, the quarter-data dual-cluster NN regression produced an error of $144942$, better than anything else we'd seen. On Kaggle, however, these predictions did worse than the mean/median attempts. This would suggest overfitting. Puzzlingly, however, when we ran the network with the full data, it performed worse.
 \end{itemize}
 
 
@@ -80,6 +80,7 @@ We submitted predictions. The first two were simple submissions with linear comb
 	\item Clustering users was still slow, but much more feasible than before. Once put on a faster machine, this went according to plan.
 	\item The averages and medians were tested out while waiting for other code to run. The impetus for this was the competition baseline, to see if we could improve on it with some small tweaks. For the most part, we couldn't. We tried a variety of approaches, including means and medians based for global data, user data, and artist data. Out of these on their own, the user mean was the most effective, but turned out to improve its performance on our cross validation data when combined with lower-weighted median data. It didn't seem that combination with any kind of artist mean helped. Finally, we experimented with also adding a bias term, which did make a small improvement in error. None of these models passed the competition baseline, however.
 	\item The neural network made a slight improvement after a few pernicious bugs were fixed. We didn't have enough time to do good cross-validation to optimize hyper-parameters; this would no doubt have benefited us, as would trying other models *cough* \textbf{random forest} *cough*. Given more time, this is an area we would have started putting more emphasis on.
+	\item We're still uncertain why adding more data made our regression performance worse. Perhaps we got a much worse random initialization, or perhaps something about the way we actually construct the predictions is worse (how we handle unknown users or artists, or how we handle negative predictions).
 \end{itemize}
 
 \end{document}
